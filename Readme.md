@@ -1,44 +1,19 @@
-CineList
-Getting Started
+# CineList
 
-Follow the instructions below to configure and run the CineList application locally.
+## Getting Started
 
-1. Environment Configuration
-Rename .env.example to .env.
-Open the .env file and update the authorization token with your valid token.
-2. Start the Node.js Server
+1. Rename `.env.example` to `.env`.
+2. Open `.env` and update the authorisation token with your own.
+3. From the `cinelist` folder, start the Node server:
 
-Navigate to the cinelist project directory and run:
+   ```bash
+   node .
+   ```
 
-bash
-node .
+4. Visit [http://localhost:3000/](http://localhost:3000/). The app should load.
 
-3. Access the Application
+## Troubleshooting
 
-Once the server starts successfully, the following message should appear:
+**`Something went wrong. Status: 401`**
 
-text
-App available on http://localhost:3000/
-
-
-Open your browser and visit:
-
-http://localhost:3000/
-
-4. Troubleshooting
-
-If the application displays the following error:
-
-text
-Something went wrong. Status: 401
-
-
-This indicates that the authorization token may be invalid or incorrect.
-
-To resolve this issue:
-
-Verify that the authorization token in your .env file is correct.
-Ensure the .env file is located in the root of the cinelist directory.
-Restart the Node.js server after making any changes to the .env file.
-
-Once the token is correctly configured, restart the application and try accessing it again.
+The authorisation token in `.env` is missing or incorrect. Fix the token, then stop the server (Ctrl+C) and run `node .` again, since `.env` is only read at startup.
