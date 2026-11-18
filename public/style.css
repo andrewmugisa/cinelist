@@ -4,6 +4,7 @@ body {
   color: white;
   font-family: "Courier New", Courier, monospace;
   text-align: center;
+  background-color: rgb(53, 81, 81);
 }
 
 #home {
