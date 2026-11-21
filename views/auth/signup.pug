@@ -1,0 +1,22 @@
+extends ../layout
+block content
+  section.emp-auth
+    .emp-auth-card.cine-auth-card
+      p.cine-eyebrow JOIN THE COMMUNITY
+      h1 Create your account
+      p.emp-auth-lead Start building your personal movie library.
+      if error
+        p.emp-alert.emp-alert-error= error
+      form.emp-form(method='POST', action='/signup')
+        .emp-field
+          label.emp-label(for='username') Username
+          input.emp-input(type='text', id='username', name='username', required, minlength='3', maxlength='30', autocomplete='username')
+        .emp-field
+          label.emp-label(for='email') Email
+          input.emp-input(type='email', id='email', name='email', required, autocomplete='email')
+        .emp-field
+          label.emp-label(for='password') Password
+          input.emp-input(type='password', id='password', name='password', required, minlength='8', autocomplete='new-password')
+          p.emp-help At least 8 characters.
+        button.btn-emp-primary(type='submit') Create account
+      p.emp-auth-footer Already have an account? #[a(href='/login') Login]

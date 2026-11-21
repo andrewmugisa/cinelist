@@ -5,10 +5,8 @@
 1. Rename `.env.example` to `.env`.
 2. Open `.env` and update the authorisation token with your own.
 3. From the `cinelist` folder, start the Node server:
-
-   ```bash
-   node .
-   ```
+   npm start 
+   Use: npm run dev - for auto update node server, liveserver like experience
 
 4. Visit [http://localhost:3000/](http://localhost:3000/). The app should load.
 
