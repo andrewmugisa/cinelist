@@ -1,0 +1,29 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title #{title} | CineList
+    link(rel='stylesheet', href='/css/tokens.css')
+    link(rel='stylesheet', href='/css/base.css')
+    link(rel='stylesheet', href='/css/components.css')
+    link(rel='stylesheet', href='/css/layout.css')
+    link(rel='stylesheet', href='/css/pages.css')
+    link(rel='stylesheet', href='/css/cinelist.css')
+  body.emp-public.cinelist-body
+    header.cine-nav
+      a.cine-brand(href='/') CineList
+      nav.cine-nav-links
+        a(href='/') Home
+        if currentUser
+          span.cine-welcome Welcome, #{currentUser.username}
+          form(method='POST', action='/logout')
+            button.btn-emp-secondary(type='submit') Logout
+        else
+          a(href='/login') Login
+          a.cine-signup-link(href='/signup') Sign up
+    main.cine-main
+      block content
+    footer.cine-footer
+      p CineList — your personal movie library.
+      p.cine-disclaimer Movie metadata and images supplied by TMDB. This project is not endorsed or certified by TMDB.

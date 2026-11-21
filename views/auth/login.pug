@@ -1,0 +1,18 @@
+extends ../layout
+block content
+  section.emp-auth
+    .emp-auth-card.cine-auth-card
+      p.cine-eyebrow WELCOME BACK
+      h1 Login to CineList
+      p.emp-auth-lead Pick up where you left off.
+      if error
+        p.emp-alert.emp-alert-error= error
+      form.emp-form(method='POST', action='/login')
+        .emp-field
+          label.emp-label(for='email') Email
+          input.emp-input(type='email', id='email', name='email', required, autocomplete='email')
+        .emp-field
+          label.emp-label(for='password') Password
+          input.emp-input(type='password', id='password', name='password', required, autocomplete='current-password')
+        button.btn-emp-primary(type='submit') Login
+      p.emp-auth-footer Don't have an account? #[a(href='/signup') Sign up]

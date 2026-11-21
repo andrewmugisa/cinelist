@@ -1,0 +1,44 @@
+:root {
+    /* CineList theme: purple is the primary brand colour */
+    --color-primary: #A78BFA;
+    --color-primary-hover: #C4B5FD;
+    --color-primary-text: #17111F;
+
+    /* Goldenrod is reserved for buttons and signature accents */
+    --color-button: #DAA520;
+    --color-button-hover: #C4941C;
+    --color-button-text: #1A1D23;
+
+    --color-bg: #101116;
+    --color-surface: #1A1820;
+    --color-surface-raised: #201E27;
+    --color-text: #F5F3F6;
+    --color-text-muted: #AAA3B5;
+    --color-border: #292631;
+
+    --color-error: #B00020;
+    --color-error-hover: #8E001A;
+    --color-on-error: #FFFFFF;
+    --color-success: #1B6E3C;
+    --color-on-success: #E8F6EE;
+    --color-focus: #DAA520;
+
+    --font-family: "Inter", sans-serif;
+    --text-page-title: 1.75rem;
+    --text-section: 1.25rem;
+    --text-card-title: 1.05rem;
+    --text-body: 1rem;
+    --text-small: 0.875rem;
+    --text-label: 0.875rem;
+    --text-button: 0.9375rem;
+
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+
+    --radius: 10px;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    --content-max: 1180px;
+}

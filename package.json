@@ -1,10 +1,12 @@
 {
   "name": "cinelist",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "1. Rename `.env.example` to `.env`. 2. Open `.env` and update the authorisation token with your own. 3. From the `cinelist` folder, start the Node server:",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js", 
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,16 @@
   },
   "homepage": "https://github.com/andrewmugisa/cinelist#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-mongo": "^6.0.0",
     "dotenv": "^18.0.10",
-    "express": "^5.3.0"
+    "express": "^5.3.0",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.12.3",
+    "pug": "^3.0.4"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "nodemon": "^3.1.14"
   }
 }

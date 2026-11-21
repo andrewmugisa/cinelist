@@ -1,0 +1,93 @@
+/* Buttons */
+.btn-emp-primary,
+.btn-emp-secondary,
+.btn-emp-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0.55rem 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font-size: var(--text-button);
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+.btn-emp-primary {
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+}
+.btn-emp-primary:hover {
+    background: var(--color-accent-hover);
+    color: var(--color-accent-text);
+}
+.btn-emp-secondary {
+    background: var(--color-surface-raised);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+.btn-emp-secondary:hover {
+    color: var(--color-text);
+    filter: brightness(1.15);
+}
+.btn-emp-danger {
+    background: var(--color-error);
+    color: var(--color-on-error);
+}
+.btn-emp-danger:hover {
+    background: var(--color-error-hover);
+    color: var(--color-on-error);
+}
+
+/* Forms */
+.emp-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+.emp-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    min-width: 0;
+}
+.emp-label {
+    color: var(--color-text);
+    font-size: var(--text-label);
+    font-weight: 600;
+}
+.emp-input,
+.emp-select,
+.emp-textarea {
+    width: 100%;
+    min-height: 42px;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-family);
+    font-size: var(--text-body);
+    color-scheme: dark;
+}
+.emp-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+.emp-input:focus,
+.emp-select:focus,
+.emp-textarea:focus {
+    border-color: var(--color-focus);
+    outline: 2px solid rgba(196, 181, 253, 0.2);
+}
+.emp-help {
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+}
+@media (max-width: 650px) {
+    .emp-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
