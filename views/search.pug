@@ -1,0 +1,26 @@
+extends layout
+block content
+  section.cine-section
+    .cine-section-heading
+      div
+        p.cine-eyebrow MOVIE SEARCH
+        h1 Results for “#{query}”
+      form.cine-search(method='GET', action='/search')
+        input(type='search', name='q', value=query, required)
+        button.btn-emp-primary(type='submit') Search
+    if tmdbError
+      p.emp-alert.emp-alert-error= tmdbError
+    if movies.length
+      .cine-grid
+        each movie in movies
+          article.cine-movie-card
+            if movie.poster_path
+              img.cine-poster(src='https://image.tmdb.org/t/p/w500' + movie.poster_path, alt=movie.title + ' poster', loading='lazy')
+            else
+              .cine-no-poster No poster
+            .cine-movie-info
+              h3= movie.title
+              p= movie.release_date ? movie.release_date.slice(0, 4) : 'Release date unknown'
+              p.cine-overview= movie.overview
+    else
+      p No results found.
