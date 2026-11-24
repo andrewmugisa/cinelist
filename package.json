@@ -2,11 +2,11 @@
   "name": "cinelist",
   "version": "1.0.0",
   "description": "1. Rename `.env.example` to `.env`. 2. Open `.env` and update the authorisation token with your own. 3. From the `cinelist` folder, start the Node server:",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js", 
-    "dev": "nodemon app.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
@@ -26,11 +26,12 @@
     "dotenv": "^18.0.10",
     "express": "^5.3.0",
     "express-session": "^1.19.0",
-    "mongoose": "^9.12.3",
+    "mongodb": "^7.9.1",
+    "mongoose": "^9.13.0",
     "pug": "^3.0.4"
   },
   "devDependencies": {
     "jest": "^29.0.0",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.11"
   }
 }
