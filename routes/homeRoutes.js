@@ -4,7 +4,7 @@ const { tmdbRequest } = require('../services/tmdb');
 
 router.get('/', async (req, res) => {
   try {
-    const data = await tmdbRequest('/movie/popular?language=en-US&page=1');
+    const data = await tmdbRequest('/movie/popular');
     res.render('home', { title: 'CineList', movies: data.results || [], tmdbError: null });
   } catch (error) {
     console.error(error.message);
