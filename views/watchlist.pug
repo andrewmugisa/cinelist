@@ -1,0 +1,48 @@
+extends layout
+
+block content
+  section.cine-section
+    .cine-section-heading
+      div
+        h1 My Watchlist
+        p Manage the movies you’ve saved.
+      a.btn-emp-secondary(href='/') Browse movies
+
+    form(method='GET' action='/watchlist')
+      label(for='watchlist-search') Movie title
+      input#watchlist-search.emp-input(type='search' name='q' value=q)
+      label(for='watchlist-status') Watch status
+      select#watchlist-status.emp-input(name='status')
+        option(value='') All statuses
+        each option in statuses
+          option(value=option selected=status === option)= option
+      button.btn-emp-primary(type='submit') Apply filters
+      if q || status
+        a(href='/watchlist') Clear filters
+
+    if entries.length
+      .cine-grid
+        each entry in entries
+          - const movieTitle = entry.title || 'Movie #' + entry.movieId
+          article.cine-movie-card
+            .cine-movie-info
+              h2= movieTitle
+              p= entry.status
+              if entry.score != null
+                p Score: #{entry.score}/10
+              if entry.notes
+                p= entry.notes
+              form(method='POST' action='/watchlist/' + entry._id + '/status')
+                input(type='hidden' name='_csrf' value=csrfToken)
+                label(for='status-' + entry._id) Watch status for #{movieTitle}
+                select.emp-input(id='status-' + entry._id name='status')
+                  each option in statuses
+                    option(value=option selected=entry.status === option)= option
+                button.btn-emp-secondary(type='submit') Update status
+              form(method='POST' action='/watchlist/' + entry._id + '/delete')
+                input(type='hidden' name='_csrf' value=csrfToken)
+                button.btn-emp-secondary(type='submit' aria-label='Remove ' + movieTitle) Remove
+    else if q || status
+      p No saved movies match your filters.
+    else
+      p Your watchlist is empty. Browse movies to find something to save.
