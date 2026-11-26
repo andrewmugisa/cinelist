@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  if tmdbError
+    p.emp-alert.emp-alert-error= tmdbError
+
+  if movies && movies.length
+    .cine-grid
+      each movie in movies
+        include partials/movie-card
+  else
+    p No results found.
