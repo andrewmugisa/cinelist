@@ -1,178 +1,178 @@
 extends ../layout
 
 block content
-- const settingsUser = (typeof profileUser !== 'undefined' && profileUser) ? profileUser : ((typeof currentUser !== 'undefined' && currentUser) ? currentUser : {})
-- const savedFavorites = (typeof favoriteMovies !== 'undefined' && Array.isArray(favoriteMovies)) ? favoriteMovies : []
-- const profileImage = settingsUser.profilePicture || settingsUser.profile_picture || ''
-- const coverImage = settingsUser.backgroundImage || settingsUser.background_image || ''
+  - const settingsUser = (typeof profileUser !== 'undefined' && profileUser) ? profileUser : ((typeof currentUser !== 'undefined' && currentUser) ? currentUser : {})
+  - const savedFavorites = (typeof favoriteMovies !== 'undefined' && Array.isArray(favoriteMovies)) ? favoriteMovies : []
+  - const profileImage = settingsUser.profilePicture || settingsUser.profile_picture || ''
+  - const coverImage = settingsUser.backgroundImage || settingsUser.background_image || ''
 
-section.cine-settings-page
+  section.cine-settings-page
     header.cine-settings-heading
-    p.cine-eyebrow YOUR ACCOUNT
-    h1 Profile settings
-    p.cine-settings-intro Personalize how you appear to the CineList community.
+      p.cine-eyebrow YOUR ACCOUNT
+      h1 Profile settings
+      p.cine-settings-intro Personalize how you appear to the CineList community.
 
     form#profile-settings-form.cine-settings-form(method='POST', action='/user/settings', enctype='multipart/form-data')
-    section.cine-settings-section.cine-settings-identity(aria-labelledby='settings-identity-title')
+      section.cine-settings-section.cine-settings-identity(aria-labelledby='settings-identity-title')
         .cine-settings-section-heading
-        h2#settings-identity-title Your identity
-        p Update the username people use to find you.
+          h2#settings-identity-title Your identity
+          p Update the username people use to find you.
 
         .cine-settings-username
-        label.cine-settings-label(for='username') Username
-        input#username.cine-settings-input(type='text', name='username', value=settingsUser.username || '', minlength='3', maxlength='30', autocomplete='username', required)
-        p.cine-settings-help Your username will be part of your public profile address.
+          label.cine-settings-label(for='username') Username
+          input#username.cine-settings-input(type='text', name='username', value=settingsUser.username || '', minlength='3', maxlength='30', autocomplete='username', required)
+          p.cine-settings-help Your username will be part of your public profile address.
 
-    section.cine-settings-section(aria-labelledby='settings-appearance-title')
+      section.cine-settings-section(aria-labelledby='settings-appearance-title')
         .cine-settings-section-heading
-        h2#settings-appearance-title Profile appearance
-        p Choose a profile picture and a cover image.
+          h2#settings-appearance-title Profile appearance
+          p Choose a profile picture and a cover image.
 
         .cine-settings-image-editors
-        .cine-settings-image-editor.cine-settings-avatar-editor
+          .cine-settings-image-editor.cine-settings-avatar-editor
             label.cine-settings-label Profile picture
             label.cine-settings-avatar-upload(for='profile-picture-input', title='Choose a new profile picture')
-            if profileImage
+              if profileImage
                 img#profile-picture-preview.cine-settings-avatar-preview(src=profileImage, alt='Current profile picture')
-            else
+              else
                 span#profile-picture-placeholder.cine-settings-avatar-placeholder
-                span.cine-settings-avatar-initial= (settingsUser.username || 'U').charAt(0).toUpperCase()
-            span.cine-settings-image-edit-indicator
+                  span.cine-settings-avatar-initial= (settingsUser.username || 'U').charAt(0).toUpperCase()
+              span.cine-settings-image-edit-indicator
                 span(aria-hidden='true') ✎
                 |  Change picture
             input#profile-picture-input.cine-settings-file-input(type='file', name='profilePicture', accept='image/png,image/jpeg,image/webp')
             p.cine-settings-help Recommended: square image, 500 × 500 px.
 
-        .cine-settings-image-editor.cine-settings-cover-editor
+          .cine-settings-image-editor.cine-settings-cover-editor
             label.cine-settings-label(for='background-image-input') Background image
             label.cine-settings-cover-upload(for='background-image-input', title='Choose a new profile background')
-            if coverImage
+              if coverImage
                 img#background-image-preview.cine-settings-cover-preview(src=coverImage, alt='Current profile background')
-            else
+              else
                 span#background-image-placeholder.cine-settings-cover-placeholder
-                span(aria-hidden='true') ◈
-                span No background selected
-            span.cine-settings-image-edit-indicator
+                  span(aria-hidden='true') ◈
+                  span No background selected
+              span.cine-settings-image-edit-indicator
                 span(aria-hidden='true') ✎
                 |  Change background
             input#background-image-input.cine-settings-file-input(type='file', name='backgroundImage', accept='image/png,image/jpeg,image/webp')
             p.cine-settings-help Recommended: 1080 × 566 px (wide landscape).
 
-    section.cine-settings-section(aria-labelledby='settings-favorites-title')
+      section.cine-settings-section(aria-labelledby='settings-favorites-title')
         .cine-settings-section-heading
-        h2#settings-favorites-title Favourite movies
-        p Choose up to 10 movies to feature on your profile. Select a filled slot to replace or remove it.
+          h2#settings-favorites-title Favourite movies
+          p Choose up to 10 movies to feature on your profile. Select a filled slot to replace or remove it.
 
         .cine-favorites-editor
-        .cine-favorites-grid
+          .cine-favorites-grid
             each slotNumber in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-            - const favorite = savedFavorites[slotNumber - 1]
-            .cine-favorite-slot-wrapper
+              - const favorite = savedFavorites[slotNumber - 1]
+              .cine-favorite-slot-wrapper
                 if favorite
-                button.cine-favorite-slot.cine-favorite-slot-filled(type='button', data-favorite-slot=slotNumber, aria-label='Edit favourite ' + slotNumber + ': ' + favorite.title)
+                  button.cine-favorite-slot.cine-favorite-slot-filled(type='button', data-favorite-slot=slotNumber, aria-label='Edit favourite ' + slotNumber + ': ' + favorite.title)
                     if favorite.posterPath || favorite.poster_path
-                    img.cine-favorite-poster(src='https://image.tmdb.org/t/p/w342' + (favorite.posterPath || favorite.poster_path), alt=favorite.title + ' poster', loading='lazy')
+                      img.cine-favorite-poster(src='https://image.tmdb.org/t/p/w342' + (favorite.posterPath || favorite.poster_path), alt=favorite.title + ' poster', loading='lazy')
                     else
-                    span.cine-favorite-poster-placeholder
+                      span.cine-favorite-poster-placeholder
                         span= favorite.title
                     span.cine-favorite-slot-edit Edit
-                p.cine-favorite-slot-title= favorite.title
+                  p.cine-favorite-slot-title= favorite.title
                 else
-                button.cine-favorite-slot.cine-favorite-slot-empty(type='button', data-favorite-slot=slotNumber, aria-label='Add favourite movie in slot ' + slotNumber)
+                  button.cine-favorite-slot.cine-favorite-slot-empty(type='button', data-favorite-slot=slotNumber, aria-label='Add favourite movie in slot ' + slotNumber)
                     span.cine-favorite-plus(aria-hidden='true') +
                     span Add movie
                 input(type='hidden', name='favoriteMovieIds[]', value=favorite ? favorite.id : '', data-favorite-id-slot=slotNumber)
 
-        #favorite-picker.cine-favorite-picker(hidden)
+          #favorite-picker.cine-favorite-picker(hidden)
             .cine-favorite-picker-heading
-            div
+              div
                 h3#favorite-picker-title Add a favourite
                 p#favorite-picker-description Search for a movie to place in the selected slot.
-            button#close-favorite-picker.cine-icon-button(type='button', aria-label='Close favourite movie search') ×
+              button#close-favorite-picker.cine-icon-button(type='button', aria-label='Close favourite movie search') ×
             .cine-favorite-search
-            label.cine-settings-label(for='favorite-movie-query') Movie title
-            .cine-favorite-search-control
+              label.cine-settings-label(for='favorite-movie-query') Movie title
+              .cine-favorite-search-control
                 input#favorite-movie-query.cine-settings-input(type='search', placeholder='Search movie titles...', autocomplete='off')
                 button#favorite-movie-search-button.btn-emp-primary(type='button') Search
-            #favorite-movie-results.cine-favorite-results(aria-live='polite')
-            p.cine-settings-help Movie search results will appear here once the search route is connected.
+              #favorite-movie-results.cine-favorite-results(aria-live='polite')
+              p.cine-settings-help Movie search results will appear here once the search route is connected.
             button#remove-favorite-button.cine-text-button(type='button', hidden) Remove this favourite
             input#favorite-slot-input(type='hidden', name='favoriteSlot')
             input#favorite-movie-id-input(type='hidden', name='favoriteMovieId')
 
-    .cine-settings-actions
+      .cine-settings-actions
         button.btn-emp-primary.cine-save-settings(type='submit') Save settings
 
-script.
-    (() => {
-    const profileInput = document.getElementById('profile-picture-input');
-    const backgroundInput = document.getElementById('background-image-input');
+  script.
+      (() => {
+      const profileInput = document.getElementById('profile-picture-input');
+      const backgroundInput = document.getElementById('background-image-input');
 
-    function previewImage(input, previewId, placeholderId, imageClass, altText) {
-        if (!input) return;
-        input.addEventListener('change', () => {
-        const file = input.files && input.files[0];
-        if (!file) return;
-        if (!file.type.startsWith('image/')) return;
+      function previewImage(input, previewId, placeholderId, imageClass, altText) {
+          if (!input) return;
+          input.addEventListener('change', () => {
+          const file = input.files && input.files[0];
+          if (!file) return;
+          if (!file.type.startsWith('image/')) return;
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            let preview = document.getElementById(previewId);
-            if (!preview) {
-            preview = document.createElement('img');
-            preview.id = previewId;
-            preview.className = imageClass;
-            preview.alt = altText;
-            const placeholder = document.getElementById(placeholderId);
-            if (placeholder) placeholder.replaceWith(preview);
-            }
-            preview.src = reader.result;
-        };
-        reader.readAsDataURL(file);
-        });
-    }
+          const reader = new FileReader();
+          reader.onload = () => {
+              let preview = document.getElementById(previewId);
+              if (!preview) {
+              preview = document.createElement('img');
+              preview.id = previewId;
+              preview.className = imageClass;
+              preview.alt = altText;
+              const placeholder = document.getElementById(placeholderId);
+              if (placeholder) placeholder.replaceWith(preview);
+              }
+              preview.src = reader.result;
+          };
+          reader.readAsDataURL(file);
+          });
+      }
 
-    previewImage(profileInput, 'profile-picture-preview', 'profile-picture-placeholder', 'cine-settings-avatar-preview', 'Selected profile picture preview');
-    previewImage(backgroundInput, 'background-image-preview', 'background-image-placeholder', 'cine-settings-cover-preview', 'Selected background image preview');
+      previewImage(profileInput, 'profile-picture-preview', 'profile-picture-placeholder', 'cine-settings-avatar-preview', 'Selected profile picture preview');
+      previewImage(backgroundInput, 'background-image-preview', 'background-image-placeholder', 'cine-settings-cover-preview', 'Selected background image preview');
 
-    const picker = document.getElementById('favorite-picker');
-    const pickerTitle = document.getElementById('favorite-picker-title');
-    const pickerDescription = document.getElementById('favorite-picker-description');
-    const slotInput = document.getElementById('favorite-slot-input');
-    const removeButton = document.getElementById('remove-favorite-button');
-    const queryInput = document.getElementById('favorite-movie-query');
-    const closeButton = document.getElementById('close-favorite-picker');
+      const picker = document.getElementById('favorite-picker');
+      const pickerTitle = document.getElementById('favorite-picker-title');
+      const pickerDescription = document.getElementById('favorite-picker-description');
+      const slotInput = document.getElementById('favorite-slot-input');
+      const removeButton = document.getElementById('remove-favorite-button');
+      const queryInput = document.getElementById('favorite-movie-query');
+      const closeButton = document.getElementById('close-favorite-picker');
 
-    document.querySelectorAll('[data-favorite-slot]').forEach((slot) => {
-        slot.addEventListener('click', () => {
-        const slotNumber = slot.dataset.favoriteSlot;
-        const isFilled = slot.classList.contains('cine-favorite-slot-filled');
-        slotInput.value = slotNumber;
-        pickerTitle.textContent = isFilled ? 'Replace favourite' : 'Add a favourite';
-        pickerDescription.textContent = `Choose a movie for favourite slot ${slotNumber}.`;
-        removeButton.hidden = !isFilled;
-        picker.hidden = false;
-        queryInput.focus();
-        picker.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
-    });
+      document.querySelectorAll('[data-favorite-slot]').forEach((slot) => {
+          slot.addEventListener('click', () => {
+          const slotNumber = slot.dataset.favoriteSlot;
+          const isFilled = slot.classList.contains('cine-favorite-slot-filled');
+          slotInput.value = slotNumber;
+          pickerTitle.textContent = isFilled ? 'Replace favourite' : 'Add a favourite';
+          pickerDescription.textContent = `Choose a movie for favourite slot ${slotNumber}.`;
+          removeButton.hidden = !isFilled;
+          picker.hidden = false;
+          queryInput.focus();
+          picker.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          });
+      });
 
-    closeButton.addEventListener('click', () => {
-        picker.hidden = true;
-    });
+      closeButton.addEventListener('click', () => {
+          picker.hidden = true;
+      });
 
-    removeButton.addEventListener('click', () => {
-        const slotNumber = Number(slotInput.value);
-        const slot = document.querySelector(`[data-favorite-slot="${slotNumber}"]`);
-        if (!slot) return;
-        slot.className = 'cine-favorite-slot cine-favorite-slot-empty';
-        slot.setAttribute('aria-label', `Add favourite movie in slot ${slotNumber}`);
-        slot.innerHTML = '<span class="cine-favorite-plus" aria-hidden="true">+</span><span>Add movie</span>';
-        const movieIdInput = document.querySelector(`[data-favorite-id-slot="${slotNumber}"]`);
-        if (movieIdInput) movieIdInput.value = '';
-        const wrapper = slot.closest('.cine-favorite-slot-wrapper');
-        const title = wrapper.querySelector('.cine-favorite-slot-title');
-        if (title) title.remove();
-        picker.hidden = true;
-    });
-    })();
+      removeButton.addEventListener('click', () => {
+          const slotNumber = Number(slotInput.value);
+          const slot = document.querySelector(`[data-favorite-slot="${slotNumber}"]`);
+          if (!slot) return;
+          slot.className = 'cine-favorite-slot cine-favorite-slot-empty';
+          slot.setAttribute('aria-label', `Add favourite movie in slot ${slotNumber}`);
+          slot.innerHTML = '<span class="cine-favorite-plus" aria-hidden="true">+</span><span>Add movie</span>';
+          const movieIdInput = document.querySelector(`[data-favorite-id-slot="${slotNumber}"]`);
+          if (movieIdInput) movieIdInput.value = '';
+          const wrapper = slot.closest('.cine-favorite-slot-wrapper');
+          const title = wrapper.querySelector('.cine-favorite-slot-title');
+          if (title) title.remove();
+          picker.hidden = true;
+      });
+      })();
