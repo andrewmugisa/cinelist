@@ -11,19 +11,10 @@ html(lang='en')
     link(rel='stylesheet', href='/css/pages.css')
     link(rel='stylesheet', href='/css/cinelist.css')
   body.emp-public.cinelist-body
-    header.cine-nav
-      a.cine-brand(href='/') CineList
-      nav.cine-nav-links
-        a(href='/') Home
-        if currentUser
-          span.cine-welcome Welcome, #{currentUser.username}
-          form(method='POST', action='/logout')
-            button.btn-emp-secondary(type='submit') Logout
-        else
-          a(href='/login') Login
-          a.cine-signup-link(href='/signup') Sign up
+
+    include partials/navbar
+
     main.cine-main
       block content
-    footer.cine-footer
-      p CineList — your personal movie library.
-      p.cine-disclaimer Movie metadata and images supplied by TMDB. This project is not endorsed or certified by TMDB.
+
+    include partials/footer

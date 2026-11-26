@@ -1,59 +1,98 @@
 # CineList
 
+A movie discovery and watchlist app built with **Node.js, Express, Pug, and MongoDB**, using Server-Side Rendering (SSR).
+
 ## Getting Started
 
-1. Rename `.env.example` to `.env`.
-2. Open `.env` and update the authorisation token with your own.
-3. From the `cinelist` folder, start the Node server:
-   npm start 
-   Use: npm run dev - for auto update node server, liveserver like experience
+1. **Install dependencies** (run again after pulling, e.g. to get `multer`)
 
-4. Visit [http://localhost:3000/](http://localhost:3000/). The app should load.
+   ```bash
+   npm install
+   ```
+
+2. **Configure environment variables**
+
+   Rename `.env.example` to `.env`, then add your MongoDB connection URI, your TMDB API authorisation token, and a secure random session secret.
+
+3. **Start the app** (from the project root)
+
+   ```bash
+   npm start        # production
+   npm run dev      # development, restarts on file changes (Nodemon)
+   ```
+
+4. **Open** [http://localhost:3000/](http://localhost:3000/)
 
 ## Troubleshooting
 
-**`Something went wrong. Status: 401`**
+- **`Something went wrong. Status: 401`**: the TMDB token in `.env` is missing, invalid or expired. Update it and restart.
+- **MongoDB connection errors**: check that `MONGODB_URI` is correct, your Atlas cluster is running, your IP is allowed in Network Access, and your username and password are right.
+- **Session errors**: make sure `SESSION_SECRET` is set in `.env`.
 
-The authorisation token in `.env` is missing or incorrect. Fix the token, then stop the server (Ctrl+C) and run `node .` again, since `.env` is only read at startup.
+## Project Structure
 
-
-```
+```text
 cinelist/
-│
-├── node_modules/                 # Contains installed npm packages and dependencies.
-│
-├── public/                       # Contains static frontend files served to the browser.
-│   ├── css/
-│   │   └── style.css             # Contains the styling and visual design of the application.
-│   ├── js/
-│   │   └── script.js             # Handles frontend interactions and communication with the backend.
-│   ├── images/                   # Stores images, icons, and other visual assets.
-│   └── index.html                # Main HTML page displayed to users.
-│
-├── src/                          # Contains the backend application source code.
-│   ├── config/
-│   │   └── db.js                 # Handles the connection between the application and MongoDB.
-│   │
-│   ├── models/
-│   │   └── Movie.js              # Defines the Mongoose schema and structure for movie documents.
-│   │
-│   ├── controllers/
-│   │   └── movieController.js    # Handles incoming movie requests and processes responses.
-│   │
-│   ├── routes/
-│   │   └── movieRoutes.js        # Defines the API endpoints related to movies.
-│   │
-│   ├── services/
-│   │   └── tmdbService.js        # Handles requests to The Movie Database (TMDB) API.
-│   │
-│   └── middleware/
-│       └── errorMiddleware.js   # Handles and manages application errors and HTTP error responses.
-│
-├── .env                          # Stores environment variables and sensitive configuration values.
-├── .env.example                  # Provides a template of the required environment variables.
-├── .gitignore                    # Specifies files and folders that Git should ignore.
-├── index.js                      # Main entry point that configures and starts the Express server.
-├── package.json                  # Contains project metadata, npm scripts, and dependency information.
-├── package-lock.json             # Locks dependency versions to ensure consistent installations.
-└── Readme.md                     # Documents the project, its setup instructions, and folder structure.
+├── src/
+│   ├── app.js                  # Express, middleware, sessions, routes and Pug setup
+│   ├── server.js               # Loads env, connects to MongoDB, starts the server
+│   ├── config/database.js      # Mongoose connection
+│   ├── controllers/            # auth, movie, watchlist, review, profile
+│   ├── middleware/             # auth, currentUser, flash, sameOrigin (CSRF), upload
+│   ├── models/                 # Review, User, WatchlistEntry
+│   ├── routes/                 # auth, home, movie, list, profile, api
+│   ├── services/               # tmdb.js (all TMDB requests), auth, user, watchlist, review
+│   └── utils/helpers.js        # input parsing/validation helpers
+├── views/                      # Pug templates
+├── public/                     # css/, images/, js/
+├── .env.example
+├── package.json
+└── README.md
 ```
+
+## Routes
+
+| Method | Path | Login | What it does |
+| --- | --- | --- | --- |
+| GET | `/` | | Home: popular, top rated, upcoming |
+| GET | `/discover/:category?page=N` | | `popular`, `top-rated`, `upcoming`, `now-playing` |
+| GET | `/search?q=&type=movie\|user&page=N` | | Search movies (TMDB) or users |
+| GET | `/movies/:id` | | Movie details, your list entry, reviews |
+| POST | `/movies/:id/reviews` | ✓ | Create or edit your review (`title?`, `content`) |
+| POST | `/movies/:id/reviews/delete` | ✓ | Delete your review |
+| GET | `/list?status=` | ✓ | Your list (optional status filter) |
+| POST | `/list` | ✓ | Add/update a movie (`movieId`, `status?`, `score?`, `notes?`, `redirectTo?`) |
+| POST | `/list/:movieId/update` | ✓ | Update `status` / `score` / `notes` (blank clears score/notes) |
+| POST | `/list/:movieId/delete` | ✓ | Remove from list |
+| GET | `/profile` | ✓ | Redirects to `/user/:username` |
+| GET | `/user/:username` | | Public profile |
+| GET | `/user/:username/list?status=` | | Public list |
+| GET | `/settings` | ✓ | Settings page |
+| POST | `/user/settings` (or `/settings`) | ✓ | Save username and favourites |
+| GET | `/api/movies/search?q=` | | JSON results for the favourites picker |
+
+`redirectTo` must be a path on this site (e.g. `/movies/550`); anything else is ignored.
+
+## Data passed to views
+
+Every page gets `currentUser` (or `null`) and `flash` (`{ error, success }`, one-time messages after a redirect).
+
+- **`search`**: `query`, `searchType`, `movies` (TMDB results), `users` (`username`, `profilePath`, `joinedDate`), `page`, `totalPages`, `hasNextPage`, `tmdbError`.
+- **`movies/movie`**: `movie` (TMDB details plus `releaseYear`, `genreNames`, `cast`, `directors`, `trailerUrl`), `watchlistEntry` (or `null`), `statuses`, `reviews` (`id`, `title`, `content`, `username`, `profilePath`, `isOwn`, `createdAt`, `updatedAt`, `edited`), `userReview`, `tmdbError`.
+- **`list/index`**: `listOwner` (`username`, `profilePath`), `isOwnList`, `entries`, `entriesByStatus`, `statuses`, `statusFilter`, `counts`, `totalCount`. Each entry has `id`, `title`, `posterPath`, `releaseYear`, `status`, `score`, `notes`, `addedAt`, `updatedAt`.
+- **`profile/user-profile`**: `profileUser`, `isOwnProfile`, `currentlyWatching`, `recentlyCompleted`, `favoriteMovies`, `listCounts`, `lastOnline`, `joinedDate`.
+- **`profile/settings`**: `profileUser`, `favoriteMovies` (`id`, `title`, `posterPath`).
+
+Profile and background image uploads are not implemented yet; the settings form's file inputs are ignored.
+
+## Tech Stack
+
+Node.js, Express, Pug, MongoDB Atlas with Mongoose, TMDB API, Express Session with Connect Mongo, and Nodemon for development.
+
+## Architecture
+
+Express handles each request, fetches data from MongoDB or TMDB, and renders a Pug template to HTML. Static assets are served from `public/`.
+
+- **Config and startup:** `src/app.js`, `src/server.js`
+- **Routes, middleware, models, services:** `src/routes/`, `src/middleware/`, `src/models/`, `src/services/`
+- **Templates and static files:** `views/`, `public/`

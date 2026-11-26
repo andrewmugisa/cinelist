@@ -1,0 +1,31 @@
+header.cine-nav
+  a.cine-brand(href='/') CineList
+
+  form.cine-search(method='GET', action='/search')
+    select.cine-search-type(name='type', aria-label='Search category')
+      option(value='movie', selected=searchType !== 'user') Movies
+      option(value='user', selected=searchType === 'user') Users
+    input(type='search', name='q', placeholder='Search...', aria-label='Search', value=searchQuery || '', required)
+    button.cine-search-submit(type='submit', aria-label='Submit search')
+      img(src='/images/search-btn.png', alt='')
+
+  nav.cine-nav-links
+    a(href='/') Home
+    if currentUser
+      a.cine-settings-link(href='/settings', aria-label='Settings', title='Settings')
+        span Settings
+      a.cine-nav-avatar(href='/profile', aria-label='Your profile')
+        if currentUser.profilePicture
+          img(src=currentUser.profilePicture, alt=currentUser.username + ' profile picture')
+        else
+          img(src='/images/default-avatar.png', alt='Default profile picture')
+      details.cine-user-menu
+        summary= currentUser.username
+        .cine-user-dropdown
+          a(href='/profile') Profile
+          a(href='/list') List
+          form(method='POST', action='/logout')
+            button(type='submit') Logout
+    else
+      a(href='/login') Login
+      a.cine-signup-link(href='/signup') Sign up
