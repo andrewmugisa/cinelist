@@ -4,7 +4,7 @@ A movie discovery and watchlist app built with **Node.js, Express, Pug, and Mong
 
 ## Getting Started
 
-1. **Install dependencies**
+1. **Install dependencies** (run again after pulling, e.g. to get `multer`)
 
    ```bash
    npm install
@@ -36,31 +36,54 @@ cinelist/
 ├── src/
 │   ├── app.js                  # Express, middleware, sessions, routes and Pug setup
 │   ├── server.js               # Loads env, connects to MongoDB, starts the server
-│   ├── auth/
 │   ├── config/database.js      # Mongoose connection
-│   ├── controllers/            # Reserved for request handling logic
-│   ├── middleware/auth.js      # Authentication middleware
+│   ├── controllers/            # auth, movie, watchlist, review, profile
+│   ├── middleware/             # auth, currentUser, flash, sameOrigin (CSRF), upload
 │   ├── models/                 # Review, User, WatchlistEntry
-│   ├── routes/                 # authRoutes, homeRoutes
-│   └── services/tmdb.js        # TMDB API integration
-├── views/
-│   ├── auth/                   # login, signup
-│   ├── list/index.pug          # Watchlist
-│   ├── movies/movie.pug        # Movie details
-│   ├── partials/               # footer, movie-card, navbar
-│   ├── profile/                # settings, user-profile
-│   ├── 404.pug
-│   ├── discover.pug
-│   ├── home.pug
-│   └── layout.pug              # Shared layout
-├── public/
-│   ├── css/                    # base, cinelist, components, layout, pages, style, tokens
-│   ├── images/
-│   └── js/
+│   ├── routes/                 # auth, home, movie, list, profile, api
+│   ├── services/               # tmdb.js (all TMDB requests), auth, user, watchlist, review
+│   └── utils/helpers.js        # input parsing/validation helpers
+├── views/                      # Pug templates
+├── public/                     # css/, images/, js/
 ├── .env.example
 ├── package.json
 └── README.md
 ```
+
+## Routes
+
+| Method | Path | Login | What it does |
+| --- | --- | --- | --- |
+| GET | `/` | | Home: popular, top rated, upcoming |
+| GET | `/discover/:category?page=N` | | `popular`, `top-rated`, `upcoming`, `now-playing` |
+| GET | `/search?q=&type=movie\|user&page=N` | | Search movies (TMDB) or users |
+| GET | `/movies/:id` | | Movie details, your list entry, reviews |
+| POST | `/movies/:id/reviews` | ✓ | Create or edit your review (`title?`, `content`) |
+| POST | `/movies/:id/reviews/delete` | ✓ | Delete your review |
+| GET | `/list?status=` | ✓ | Your list (optional status filter) |
+| POST | `/list` | ✓ | Add/update a movie (`movieId`, `status?`, `score?`, `notes?`, `redirectTo?`) |
+| POST | `/list/:movieId/update` | ✓ | Update `status` / `score` / `notes` (blank clears score/notes) |
+| POST | `/list/:movieId/delete` | ✓ | Remove from list |
+| GET | `/profile` | ✓ | Redirects to `/user/:username` |
+| GET | `/user/:username` | | Public profile |
+| GET | `/user/:username/list?status=` | | Public list |
+| GET | `/settings` | ✓ | Settings page |
+| POST | `/user/settings` (or `/settings`) | ✓ | Save username and favourites |
+| GET | `/api/movies/search?q=` | | JSON results for the favourites picker |
+
+`redirectTo` must be a path on this site (e.g. `/movies/550`); anything else is ignored.
+
+## Data passed to views
+
+Every page gets `currentUser` (or `null`) and `flash` (`{ error, success }`, one-time messages after a redirect).
+
+- **`search`**: `query`, `searchType`, `movies` (TMDB results), `users` (`username`, `profilePath`, `joinedDate`), `page`, `totalPages`, `hasNextPage`, `tmdbError`.
+- **`movies/movie`**: `movie` (TMDB details plus `releaseYear`, `genreNames`, `cast`, `directors`, `trailerUrl`), `watchlistEntry` (or `null`), `statuses`, `reviews` (`id`, `title`, `content`, `username`, `profilePath`, `isOwn`, `createdAt`, `updatedAt`, `edited`), `userReview`, `tmdbError`.
+- **`list/index`**: `listOwner` (`username`, `profilePath`), `isOwnList`, `entries`, `entriesByStatus`, `statuses`, `statusFilter`, `counts`, `totalCount`. Each entry has `id`, `title`, `posterPath`, `releaseYear`, `status`, `score`, `notes`, `addedAt`, `updatedAt`.
+- **`profile/user-profile`**: `profileUser`, `isOwnProfile`, `currentlyWatching`, `recentlyCompleted`, `favoriteMovies`, `listCounts`, `lastOnline`, `joinedDate`.
+- **`profile/settings`**: `profileUser`, `favoriteMovies` (`id`, `title`, `posterPath`).
+
+Profile and background image uploads are not implemented yet; the settings form's file inputs are ignored.
 
 ## Tech Stack
 
