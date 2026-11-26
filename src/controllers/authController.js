@@ -1,17 +1,25 @@
 /**
- * This file will do auth and CRUD operations
+ * Sign up, login and logout.
  */
-
-//used to to do CRUD operations with users/ user accounts
 const userService = require("../services/authService");
+const { validateUsername, safeRedirectPath } = require("../utils/helpers");
 
-//used to to do CRUD operations with Movies
-//const movieService = require("../services/movieService");
+/**
+ * Logs the user in with a fresh session ID (prevents session fixation)
+ * and returns the page they were trying to reach before logging in.
+ */
+function startSession(req, userId) {
+  const returnTo = safeRedirectPath(req.session.returnTo, "/");
 
-//public endpoint / should return home.pug if necessary
+  return new Promise((resolve, reject) => {
+    req.session.regenerate((regenerateError) => {
+      if (regenerateError) return reject(regenerateError);
 
-//CRUD
-//Creat user
+      req.session.userId = userId;
+      req.session.save((saveError) => (saveError ? reject(saveError) : resolve(returnTo)));
+    });
+  });
+}
 
 // GET /signup
 function signupPage(req, res) {
@@ -23,6 +31,9 @@ function signupPage(req, res) {
 
 // POST /signup
 async function signup(req, res) {
+  const renderError = (error) =>
+    res.render("auth/signup", { title: "Create account", error });
+
   try {
     const username = String(req.body.username || "").trim();
     const email = String(req.body.email || "")
@@ -30,44 +41,28 @@ async function signup(req, res) {
       .toLowerCase();
     const password = String(req.body.password || "");
 
-    if (username.length < 3 || username.length > 30) {
-      return res.render("auth/signup", {
-        title: "Create account",
-        error: "Username must be between 3 and 30 characters.",
-      });
-    }
+    const usernameError = validateUsername(username);
+    if (usernameError) return renderError(usernameError);
 
     if (!/^\S+@\S+\.\S+$/.test(email)) {
-      return res.render("auth/signup", {
-        title: "Create account",
-        error: "Please enter a valid email.",
-      });
+      return renderError("Please enter a valid email.");
     }
 
     if (password.length < 8) {
-      return res.render("auth/signup", {
-        title: "Create account",
-        error: "Password must be at least 8 characters.",
-      });
+      return renderError("Password must be at least 8 characters.");
     }
 
     const user = await userService.register(username, email, password);
 
-    req.session.userId = user._id.toString();
-
-    res.redirect("/");
+    res.redirect(await startSession(req, user._id.toString()));
   } catch (error) {
     console.error(error);
 
-    const message =
+    renderError(
       error.code === "DUPLICATE_USER" || error.code === 11000
         ? "Username or email is already in use."
-        : "Could not create your account. Please try again.";
-
-    res.render("auth/signup", {
-      title: "Create account",
-      error: message,
-    });
+        : "Could not create your account. Please try again.",
+    );
   }
 }
 
@@ -96,9 +91,7 @@ async function login(req, res) {
       });
     }
 
-    req.session.userId = user._id.toString();
-
-    res.redirect("/");
+    res.redirect(await startSession(req, user._id.toString()));
   } catch (error) {
     console.error(error);
 
