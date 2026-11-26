@@ -1,10 +1,10 @@
 a.cine-movie-card(href='/movies/' + movie.id)
-if movie.poster_path
+  if movie.poster_path
     img.cine-poster(src='https://image.tmdb.org/t/p/w500' + movie.poster_path, alt=movie.title + ' poster', loading='lazy')
-else
+  else
     .cine-no-poster No poster
-.cine-movie-info
+  .cine-movie-info
     h3= movie.title
     p= movie.release_date ? movie.release_date.slice(0, 4) : 'Release date unknown'
     if movie.vote_average
-    span.cine-rating ★ #{movie.vote_average.toFixed(1)}
+      span.cine-rating ★ #{movie.vote_average.toFixed(1)}
