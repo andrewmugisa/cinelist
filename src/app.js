@@ -13,7 +13,7 @@ const movieRoutes = require("./routes/movieRoutes");
 const listRoutes = require("./routes/listRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const apiRoutes = require("./routes/apiRoutes");
-
+const watchlistApiRoutes = require("./routes/watchlistApiRoutes");
 const app = express();
 
 // View engine
@@ -22,6 +22,7 @@ app.set("views", path.join(__dirname, "../views"));
 
 // Middleware
 app.use(express.urlencoded({ extended: false, limit: "100kb" }));
+app.use(express.json({ limit: "100kb" }));
 app.use(express.static(path.join(__dirname, "../public")));
 
 // Sessions
@@ -53,7 +54,7 @@ app.use(movieRoutes);
 app.use(listRoutes);
 app.use(profileRoutes);
 app.use(apiRoutes);
-
+app.use(watchlistApiRoutes);
 // 404 handler
 app.use((req, res) => {
   res.status(404).render("404", { title: "Not found" });
