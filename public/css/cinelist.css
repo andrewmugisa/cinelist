@@ -1,54 +1,14 @@
 .cinelist-body {
-  background: #101116;
-  color: #f5f3f6;
-}
-
-.cine-nav {
-  min-height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0 clamp(1rem, 5vw, 4rem);
-  border-bottom: 1px solid #292730;
-  background: #17161c;
-}
-
-.cine-brand {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  text-decoration: none;
-  color: #f4f1f7;
-}
-
-.cine-nav-links {
-  display: flex;
-  align-items: center;
-  gap: 1.1rem;
-}
-
-.cine-nav-links a {
-  color: #e6e1ec;
-  text-decoration: none;
-}
-
-.cine-nav-links form {
-  margin: 0;
-}
-
-.cine-signup-link {
-  background: #a78bfa;
-  color: #17111f !important;
-  padding: 0.55rem 0.85rem;
-  border-radius: 9px;
-  font-weight: 700;
+    background: var(--color-bg);
+    color: var(--color-text);
 }
 
 .cine-main {
-  width: min(1200px, 94%);
-  margin: auto;
-  padding: 1rem 0 3rem;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 1.5rem var(--page-gutter) 3rem;
+  box-sizing: border-box;
 }
 
 .cine-hero {
@@ -137,19 +97,7 @@
   margin: 0.35rem 0 0;
 }
 
-.cine-search {
-  display: flex;
-  gap: 0.5rem;
-}
 
-.cine-search input {
-  min-width: min(320px, 65vw);
-  background: #201e27;
-  color: white;
-  border: 1px solid #393542;
-  border-radius: 9px;
-  padding: 0.65rem 0.8rem;
-}
 
 .cine-grid {
   display: grid;

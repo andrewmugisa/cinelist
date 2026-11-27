@@ -1,24 +1,24 @@
 extends layout
 
 block content
-section.cine-section
+  section.cine-section
     .cine-section-heading
-    div
+      div
         p.cine-eyebrow DISCOVER
         h1= heading
-    a.btn-emp-secondary(href='/') Back to home
+      a.btn-emp-secondary(href='/') Back to home
 
     if tmdbError
-    p.emp-alert.emp-alert-error= tmdbError
+      p.emp-alert.emp-alert-error= tmdbError
 
     if movies && movies.length
-    .cine-grid
+      .cine-grid
         each movie in movies
-        include partials/movie-card
+          include partials/movie-card
     else
-    p No movies found in this category.
+      p No movies found in this category.
 
     if page > 1
-    a.btn-emp-secondary(href='/discover/' + category + '?page=' + (page - 1)) Previous
+      a.btn-emp-secondary(href='/discover/' + category + '?page=' + (page - 1)) Previous
     if hasNextPage
-    a.btn-emp-primary(href='/discover/' + category + '?page=' + (page + 1)) Next
+      a.btn-emp-primary(href='/discover/' + category + '?page=' + (page + 1)) Next

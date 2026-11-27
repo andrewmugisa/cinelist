@@ -1,26 +1,80 @@
+/* Global reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
 body {
-  margin: 0 20%;
-  margin-bottom: 5%;
-  color: white;
-  font-family: "Courier New", Courier, monospace;
-  text-align: center;
-  background-color: rgb(53, 81, 81);
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-family);
+    font-size: var(--text-body);
+    line-height: 1.5;
 }
 
-#home {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 5rem;
+img {
+    max-width: 100%;
 }
 
-#home img {
-  max-height: 25rem;
+button,
+input,
+select,
+textarea {
+    font: inherit;
 }
 
-.movie-card {
-  display: flex;
-  flex-direction: row;
-  max-width: max-content;
-  border: 1px solid white;
+a {
+    color: var(--color-primary);
+}
+
+.cinelist-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.cine-main {
+    width: 100%;
+    max-width: none;
+    flex: 1;
+    margin: 0;
+    padding: 1.5rem var(--page-gutter) 3rem;
+}
+
+@media (max-width: 600px) {
+    .cine-main {
+        padding: 1rem;
+    }
+}
+
+/* Prevent grid and flex children from forcing overflow */
+main,
+section,
+article,
+div {
+    min-width: 0;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
 }

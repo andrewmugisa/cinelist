@@ -1,9 +1,14 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const { escapeRegex } = require("../utils/helpers");
 
 async function register(username, email, password) {
+  // Usernames are compared case-insensitively so "Andrew" and "andrew" can't both exist.
   const existing = await User.findOne({
-    $or: [{ username }, { email }],
+    $or: [
+      { username: new RegExp(`^${escapeRegex(username)}$`, "i") },
+      { email },
+    ],
   });
 
   if (existing) {
@@ -18,6 +23,7 @@ async function register(username, email, password) {
     username,
     email,
     passwordHash,
+    lastSeenAt: new Date(),
   });
 }
 
