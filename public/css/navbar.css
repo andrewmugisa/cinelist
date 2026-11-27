@@ -96,7 +96,7 @@
 .cine-search-type {
     flex: 0 0 auto;
     height: 42px;
-    min-width: 105px;
+    min-width: 80px;
     padding: 0 2rem 0 0.8rem;
 
     appearance: none;
@@ -106,7 +106,7 @@
     background-color: var(--color-surface-raised);
     background-image: var(--dropdown-arrow);
     background-repeat: no-repeat;
-    background-position: right 0.7rem center;
+    background-position: right 0.75rem center;
     background-size: 12px;
 
     border: 1px solid var(--color-border);
@@ -120,8 +120,9 @@
     background: var(--nav-hover);
 }
 .cine-search-type:focus-visible {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
+    outline: var(--color-focus);
+    box-shadow: 0 0 0 3px var(--color-button-hover)
+
 }
 .cine-search-type option {
     color: var(--color-text);
