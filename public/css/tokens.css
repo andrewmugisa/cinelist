@@ -1,11 +1,11 @@
 :root {
     /* CineList theme: purple is the primary brand colour */
     --color-primary: #A78BFA;
-    --color-primary-hover: #C4B5FD;
+    --color-primary-hover: #C4941C;
     --color-primary-text: #17111F;
 
     /* Goldenrod is reserved for buttons and signature accents */
-    --color-button: #DAA520;
+    --color-button: Goldenrod;
     --color-button-hover: #C4941C;
     --color-button-text: #1A1D23;
 
@@ -22,6 +22,7 @@
     --color-success: #1B6E3C;
     --color-on-success: #E8F6EE;
     --color-focus: #DAA520;
+    --color-footer: #A49CAC;
 
     --font-family: "Inter", sans-serif;
     --text-page-title: 1.75rem;
@@ -40,5 +41,13 @@
 
     --radius: 10px;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-    --content-max: 1180px;
+    --content-max: 1440px;
+    --page-gutter: clamp(1rem, 4vw, 3.5rem);
+
+    --nav-height: 76px;
+    --nav-content-width: var(--content-max);
+    --nav-background: var(--color-surface);
+    --nav-input-background: var(--color-bg);
+    --nav-hover: var(--color-surface-raised);
+    --dropdown-arrow: url(/images/down-chevron.svg)
 }

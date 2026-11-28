@@ -1,0 +1,159 @@
+
+extends ../layout
+
+block content
+    if tmdbError
+        p.emp-alert.emp-alert-error= tmdbError
+
+    if movie
+        section.cine-movie-detail
+
+        //- Main movie information
+        .cine-movie-header
+
+            //- Movie poster
+            .cine-movie-poster
+            if movie.poster_path
+                img(
+                src='https://image.tmdb.org/t/p/w500' + movie.poster_path,
+                alt=movie.title + ' poster'
+                )
+            else
+                .cine-no-poster Poster unavailable
+
+            //- Movie information
+            .cine-movie-details
+
+            p.cine-eyebrow MOVIE DETAILS
+
+            h1= movie.title
+
+            if movie.tagline
+                p.cine-movie-tagline= movie.tagline
+
+            .cine-movie-metadata
+                if movie.release_date
+                .cine-metadata-item
+                    span.cine-metadata-label Release date
+                    span= movie.release_date
+
+                .cine-metadata-item
+                span.cine-metadata-label Release status
+                span.cine-release-status(
+                    class=releaseStatus === 'Upcoming' ? 'is-upcoming' : 'is-released'
+                )= releaseStatus || 'Unknown'
+
+                if movie.genres && movie.genres.length
+                .cine-metadata-item
+                    span.cine-metadata-label Genre
+                    .cine-genre-list
+                    each genre in movie.genres
+                        span.cine-genre= genre.name
+
+                if movie.runtime
+                .cine-metadata-item
+                    span.cine-metadata-label Runtime
+                    span #{movie.runtime} minutes
+
+            //- Audience and personal scores
+            .cine-movie-scores
+
+                .cine-score-card
+                span.cine-score-label Audience score
+                if movie.vote_average !== undefined && movie.vote_average !== null
+                    strong.cine-audience-score
+                    | #{movie.vote_average.toFixed(1)}
+                    small / 10
+                    span.cine-score-caption TMDB audience rating
+                else
+                    span.emp-muted No audience rating available
+
+                .cine-score-card
+                span.cine-score-label Your score
+
+                if currentUser
+                    form.cine-personal-score(
+                    method='POST',
+                    action='/movies/' + movie.id + '/score'
+                    )
+                    select(
+                        name='score',
+                        aria-label='Your movie score',
+                        required
+                    )
+                        option(value='', disabled, selected=!(watchlistEntry && watchlistEntry.score) ) Choose a score
+                        each score in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                        option(
+                            value=score,
+                            selected=watchlistEntry && watchlistEntry.score === score
+                        ) #{score} / 10
+
+                    button.btn-emp-secondary(type='submit') Save score
+                else
+                    span.emp-muted Login to rate this movie
+
+            //- List and favourite actions
+            .cine-movie-actions
+
+                if currentUser
+
+                //- Movie has already been added to the user's list
+                if watchlistEntry
+                    details.cine-status-dropdown
+                    summary.btn-emp-primary
+                        | #{watchlistEntry.status}
+                        span.cine-dropdown-arrow ▾
+
+                    .cine-status-menu
+                        p.cine-status-menu-label Change status
+
+                        each status in ['Watching', 'Plan to Watch', 'Completed', 'On Hold', 'Dropped']
+                        if status !== watchlistEntry.status
+                            form(
+                            method='POST',
+                            action='/movies/' + movie.id + '/watchlist/status'
+                            )
+                            input(type='hidden', name='status', value=status)
+                            button(type='submit')= status
+
+                //- Movie has not been added yet
+                else
+                    form(
+                    method='POST',
+                    action='/movies/' + movie.id + '/watchlist'
+                    )
+                    input(type='hidden', name='status', value='Watching')
+                    button.btn-emp-primary(type='submit') Add to my list
+
+                //- Favourite button
+                if isFavorite
+                    form(
+                    method='POST',
+                    action='/movies/' + movie.id + '/favorite/remove'
+                    )
+                    button.btn-emp-secondary(type='submit') ♥ Remove from favourites
+                else
+                    form(
+                    method='POST',
+                    action='/movies/' + movie.id + '/favorite'
+                    )
+                    button.btn-emp-secondary(type='submit') ♡ Add to favourites
+
+                else
+                a.btn-emp-primary(href='/login') Login to add to your list
+                a.btn-emp-secondary(href='/login') Login to add favourites
+
+        //- Movie overview
+        section.cine-movie-overview
+            h2 Overview
+
+            if movie.overview
+            p= movie.overview
+            else
+            p.emp-muted No overview is available for this movie.
+
+    else
+        section.cine-section
+        h1 Movie not found
+        p.emp-muted We couldn't find the movie you're looking for.
+        a.btn-emp-primary(href='/') Back to home

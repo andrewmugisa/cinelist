@@ -1,0 +1,371 @@
+/* SETTINGS PAGE */
+.cine-settings-page {
+    width: min(100% - 2rem, 1100px);
+    margin: 1.5rem auto 3rem;
+    padding: 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background: var(--color-bg);
+}
+
+.cine-settings-heading {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.cine-settings-heading h1 {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+.cine-settings-section {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.cine-settings-section h2 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+}
+
+.cine-settings-description,
+.cine-settings-help {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+.cine-settings-description {
+    margin: -0.5rem 0 1rem;
+}
+
+
+
+/* INPUTS */
+.cine-settings-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.cine-settings-input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.cine-settings-input:focus {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+.cine-settings-username-row {
+    max-width: 500px;
+}
+
+
+
+/* PROFILE IMAGES */
+.cine-settings-image-editors {
+    display: grid;
+    grid-template-columns: minmax(140px, 0.8fr) minmax(250px, 2fr);
+    gap: 2rem;
+}
+
+.cine-settings-image-editor {
+    min-width: 0;
+}
+
+.cine-settings-avatar-upload,
+.cine-settings-cover-upload {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    cursor: pointer;
+}
+
+.cine-settings-avatar-upload {
+    width: 140px;
+    aspect-ratio: 1;
+    border-radius: 16px;
+}
+
+.cine-settings-avatar-upload img,
+.cine-settings-cover-upload img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cine-settings-avatar-placeholder {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    background: linear-gradient(145deg, #513475, #21162e);
+    color: white;
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+.cine-settings-cover-upload {
+    width: 100%;
+    aspect-ratio: 1080 / 566;
+    border-radius: 16px;
+    color: var(--color-text-muted);
+}
+
+.cine-settings-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.cine-settings-change-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: var(--color-text);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cine-settings-change-link:hover {
+    color: var(--color-primary);
+}
+
+.cine-settings-help {
+    margin: 0.4rem 0 0;
+}
+
+
+/* FAVOURITE MOVIES */
+.cine-favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.6rem;
+}
+
+.cine-favorite-slot-wrapper {
+    min-width: 0;
+}
+
+.cine-favorite-slot {
+    position: relative;
+    display: flex;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid var(--color-button);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+}
+
+.cine-favorite-slot:hover {
+    border-color: var(--color-primary);
+}
+
+.cine-favorite-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cine-favorite-plus {
+    color: var(--color-button);
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.cine-favorite-slot.is-empty {
+    gap: 0.3rem;
+    font-size: 0.75rem;
+}
+
+.cine-favorite-no-poster {
+    padding: 0.5rem;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.cine-favorite-edit {
+    position: absolute;
+    right: 0.35rem;
+    bottom: 0.35rem;
+    padding: 0.25rem 0.45rem;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 0.7rem;
+}
+
+.cine-favorite-title {
+    margin: 0.35rem 0 0;
+    overflow: hidden;
+    font-size: 0.75rem;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* MOVIE SEARCH PICKER */
+.cine-favorite-picker {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    background: var(--color-surface);
+}
+
+.cine-favorite-picker[hidden] {
+    display: none;
+}
+
+.cine-favorite-picker-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.cine-favorite-picker-heading h3 {
+    margin: 0;
+}
+
+.cine-favorite-picker-heading p {
+    margin: 0.3rem 0 0;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+.cine-settings-close {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.cine-favorite-search {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.cine-settings-search-button,
+.cine-settings-save {
+    padding: 0.75rem 1.1rem;
+    border: 0;
+    border-radius: 8px;
+    background: var(--color-button);
+    color: var(--color-button-text);
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.cine-favorite-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.cine-favorite-result {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    text-align: left;
+    cursor: pointer;
+}
+
+.cine-favorite-result:hover {
+    border-color: var(--color-primary);
+}
+
+.cine-favorite-result img,
+.cine-favorite-result-placeholder {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    background: var(--color-surface-raised);
+}
+
+.cine-favorite-result-placeholder {
+    display: grid;
+    place-items: center;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+.cine-favorite-result span {
+    padding: 0.45rem;
+    font-size: 0.8rem;
+}
+
+.cine-settings-remove {
+    margin-top: 1rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #e47b83;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* SAVE */
+.cine-settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1.25rem;
+}
+
+.cine-settings-save {
+    min-width: 150px;
+}
+
+@media (max-width: 650px) {
+    .cine-settings-page {
+        width: calc(100% - 1rem);
+        padding: 1rem;
+    }
+
+    .cine-settings-image-editors {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .cine-settings-cover-upload {
+        max-width: 100%;
+    }
+
+    .cine-favorites-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
