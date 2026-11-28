@@ -71,4 +71,15 @@ async function removeEntry(req, res) {
   res.json({ message: "Removed from your list." });
 }
 
-module.exports = { getList, createEntry, updateEntry, removeEntry };
+// DELETE /api/list/:movieId/score -> remove only the score, keep the movie
+async function removeScore(req, res) {
+  const movieId = parseMovieId(req.params.movieId);
+  if (!movieId) return res.status(400).json({ error: "Invalid movie id." });
+
+  const entry = await watchlistService.updateEntry(req.session.userId, movieId, { score: null });
+  if (!entry) return res.status(404).json({ error: "That movie isn't on your list." });
+
+  res.json(entry);
+}
+
+module.exports = { getList, createEntry, updateEntry, removeEntry, removeScore };
