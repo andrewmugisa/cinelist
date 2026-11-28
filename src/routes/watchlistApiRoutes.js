@@ -15,5 +15,5 @@ router.get("/api/list", requireLogin, controller.getList);
 router.post("/api/list", requireLogin, controller.createEntry);
 router.put("/api/list/:movieId", requireLogin, controller.updateEntry);
 router.delete("/api/list/:movieId", requireLogin, controller.removeEntry);
-
+router.delete("/api/list/:movieId/score", requireLogin, controller.removeScore);
 module.exports = router;
