@@ -1,0 +1,205 @@
+/* Homepage hero */
+.cine-hero {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    align-items: center;
+    min-height: 340px;
+    padding: clamp(2rem, 5vw, 4rem);
+    margin: 1.5rem 0 2.5rem;
+    border-radius: 24px;
+    background: radial-gradient(
+        circle at 80% 30%,
+        #6b4d9c 0,
+        #342344 28%,
+        #211c2b 58%,
+        #17151d 100%
+    );
+    overflow: hidden;
+}
+
+.cine-hero h1 {
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    letter-spacing: -0.06em;
+    line-height: 1.05;
+    margin: 0.4rem 0 1rem;
+}
+
+.cine-hero h1 span {
+    color: #c4b5fd;
+}
+
+.cine-hero-copy > p:not(.cine-eyebrow) {
+    max-width: 520px;
+    color: #d4cedc;
+    font-size: 1.08rem;
+}
+
+.cine-eyebrow {
+    color: #c4b5fd;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+}
+
+.cine-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.cine-hero-art {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    min-height: 220px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    background: linear-gradient(
+        135deg,
+        transparent,
+        rgba(196, 181, 253, 0.12)
+    );
+}
+
+.cine-art-caption {
+    color: #d9caff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-align: right;
+}
+
+/* Homepage sections */
+.cine-section {
+    margin: 2.5rem 0;
+}
+
+.cine-section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.cine-section-heading h1,
+.cine-section-heading h2 {
+    margin: 0.35rem 0 0;
+}
+
+.cine-section-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Carousel controls */
+.cine-carousel-controls {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.cine-carousel-button {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.cine-carousel-button:hover:not(:disabled) {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-primary-text);
+}
+
+.cine-carousel-button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* Horizontal movie carousel */
+.cine-carousel-track {
+    display: grid;
+    grid-auto-columns: calc((100% - 4 * 1rem) / 5);
+    grid-auto-flow: column;
+    gap: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.35rem 0.15rem 1rem;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-surface);
+}
+
+.cine-carousel-track .cine-movie-card {
+    scroll-snap-align: start;
+}
+
+/* Homepage feature row */
+.cine-feature-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 3rem 0 1rem;
+}
+
+.cine-feature-row article {
+    padding: 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background: var(--color-surface);
+}
+
+.cine-feature-row p {
+    color: var(--color-text-muted);
+}
+
+/* Responsive homepage */
+@media (max-width: 900px) {
+    .cine-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .cine-hero-art {
+        display: none;
+    }
+
+    .cine-carousel-track {
+        grid-auto-columns: calc((100% - 2 * 1rem) / 3);
+    }
+}
+
+@media (max-width: 600px) {
+    .cine-hero {
+        padding: 1.5rem;
+    }
+
+    .cine-section-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .cine-carousel-track {
+        grid-auto-columns: calc((100% - 1rem) / 2);
+    }
+
+    .cine-feature-row {
+        grid-template-columns: 1fr;
+    }
+}

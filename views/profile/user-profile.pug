@@ -1,89 +1,152 @@
+
 extends ../layout
 
-block content
-  - const viewedUser = (typeof profileUser !== 'undefined' && profileUser) ? profileUser : {}
-  - const watching = (typeof currentlyWatching !== 'undefined' && Array.isArray(currentlyWatching)) ? currentlyWatching.slice(0, 5) : []
-  - const completed = (typeof recentlyCompleted !== 'undefined' && Array.isArray(recentlyCompleted)) ? recentlyCompleted.slice(0, 5) : []
-  - const favorites = (typeof favoriteMovies !== 'undefined' && Array.isArray(favoriteMovies)) ? favoriteMovies.slice(0, 10) : []
-  - const avatar = viewedUser.profilePicture || viewedUser.profile_picture || '/images/default-avatar.png'
-  - const cover = viewedUser.backgroundImage || viewedUser.background_image || ''
-  - const displayName = viewedUser.username || 'CineList member'
-  - const profilePath = '/user/' + encodeURIComponent(displayName)
+block pageStyles
+  link(rel='stylesheet', href='/css/profile.css')
 
-  section.cine-profile-page
-    .cine-profile-banner(class={ 'cine-profile-banner-empty': !cover }, style=cover ? 'background-image: url("' + cover + '")' : '')
-      if !cover
-        span.cine-profile-banner-placeholder Your movie story
+block content
+  .cine-profile
+
+    //- Profile background
+    header.cine-profile-banner
 
     .cine-profile-layout
+
+      //- Left profile sidebar
       aside.cine-profile-sidebar
-        img.cine-profile-avatar(src=avatar, alt=displayName + ' profile picture')
-        h1.cine-profile-username= displayName
+        .cine-profile-avatar
+          span= profileUser.username.charAt(0).toUpperCase()
+
+        h2.cine-profile-username= profileUser.username
+
         .cine-profile-meta
-          p
-            strong Last online
-            span= typeof lastOnline !== 'undefined' && lastOnline ? lastOnline : 'Not available'
-          p
-            strong Joined
-            span= typeof joinedDate !== 'undefined' && joinedDate ? joinedDate : 'Not available'
-        a.btn-emp-primary.cine-profile-list-button(href=profilePath + '/list') View list
+          .cine-profile-meta-item
+            span Member since
+            strong= joinedDate || 'Unknown'
 
-      .cine-profile-content
-        .cine-profile-columns
-          section.cine-profile-panel(aria-labelledby='currently-watching-title')
-            header.cine-profile-panel-heading
-              h2#currently-watching-title Currently Watching
-              span.cine-profile-count= watching.length + ' / 5'
-            if watching.length
-              ul.cine-profile-entry-list
-                each movie in watching
-                  li.cine-profile-entry
-                    if movie.posterPath || movie.poster_path
-                      img.cine-profile-entry-poster(src='https://image.tmdb.org/t/p/w185' + (movie.posterPath || movie.poster_path), alt=(movie.title || 'Movie') + ' poster', loading='lazy')
+          .cine-profile-meta-item
+            span Last online
+            strong= lastOnline || 'Unknown'
+
+        .cine-profile-actions
+          a.cine-button.cine-button-primary(
+            href='/user/' + encodeURIComponent(profileUser.username) + '/list'
+          ) View List
+
+          if isOwnProfile
+            a.cine-button.cine-button-secondary(href='/settings') Edit Profile
+
+        //- Statistics below profile picture
+        .cine-profile-stats
+          h3 Collection Statistics
+
+          .cine-profile-stat
+            span Plan to Watch
+            strong= listCounts['Plan to Watch'] || 0
+
+          .cine-profile-stat
+            span Watching
+            strong= listCounts.Watching || 0
+
+          .cine-profile-stat
+            span Completed
+            strong= listCounts.Completed || 0
+
+          .cine-profile-stat
+            span On Hold
+            strong= listCounts['On Hold'] || 0
+
+          .cine-profile-stat
+            span Dropped
+            strong= listCounts.Dropped || 0
+
+      //- Main profile content
+      main.cine-profile-main
+
+        //- Two main sections side by side
+        .cine-profile-primary-grid
+
+          //- Currently Watching
+          section.cine-profile-section
+            .cine-profile-section-heading
+              h2 Currently Watching
+              span.cine-profile-count #{currentlyWatching.length} / 5
+
+            if currentlyWatching.length
+              .cine-profile-movie-grid
+                each movie in currentlyWatching
+                  a.cine-profile-movie(href='/movies/' + movie.movieId)
+                    if movie.posterPath
+                      img(
+                        src='https://image.tmdb.org/t/p/w500' + movie.posterPath
+                        alt=movie.title + ' poster'
+                        loading='lazy'
+                      )
                     else
-                      .cine-profile-entry-poster.cine-profile-entry-poster-empty No poster
-                    .cine-profile-entry-details
-                      h3= movie.title || 'Untitled movie'
-                      if movie.releaseYear || movie.release_year || movie.release_date
-                        p= movie.releaseYear || movie.release_year || movie.release_date.slice(0, 4)
-                      if movie.score !== undefined && movie.score !== null
-                        p.cine-profile-entry-score My score: #{movie.score}
-            else
-              p.cine-profile-empty No movies being watched yet.
+                      .cine-profile-no-poster No poster
 
-          section.cine-profile-panel(aria-labelledby='recently-completed-title')
-            header.cine-profile-panel-heading
-              h2#recently-completed-title Recently Completed
-              span.cine-profile-count= completed.length + ' / 5'
-            if completed.length
-              ul.cine-profile-entry-list
-                each movie in completed
-                  li.cine-profile-entry
-                    if movie.posterPath || movie.poster_path
-                      img.cine-profile-entry-poster(src='https://image.tmdb.org/t/p/w185' + (movie.posterPath || movie.poster_path), alt=(movie.title || 'Movie') + ' poster', loading='lazy')
+                    .cine-profile-movie-info
+                      h3= movie.title
+                      if movie.score
+                        span.cine-profile-score ★ #{movie.score}/10
+            else
+              .cine-profile-empty
+                p No movies currently being watched.
+                if isOwnProfile
+                  a(href='/discover/popular') Discover movies
+
+          //- Recently Completed
+          section.cine-profile-section
+            .cine-profile-section-heading
+              h2 Recently Completed
+              span.cine-profile-count #{recentlyCompleted.length} / 5
+
+            if recentlyCompleted.length
+              .cine-profile-movie-grid
+                each movie in recentlyCompleted
+                  a.cine-profile-movie(href='/movies/' + movie.movieId)
+                    if movie.posterPath
+                      img(
+                        src='https://image.tmdb.org/t/p/w500' + movie.posterPath
+                        alt=movie.title + ' poster'
+                        loading='lazy'
+                      )
                     else
-                      .cine-profile-entry-poster.cine-profile-entry-poster-empty No poster
-                    .cine-profile-entry-details
-                      h3= movie.title || 'Untitled movie'
-                      if movie.releaseYear || movie.release_year || movie.release_date
-                        p= movie.releaseYear || movie.release_year || movie.release_date.slice(0, 4)
-                      if movie.score !== undefined && movie.score !== null
-                        p.cine-profile-entry-score My score: #{movie.score}
-            else
-              p.cine-profile-empty No completed movies yet.
+                      .cine-profile-no-poster No poster
 
-        section.cine-profile-panel.cine-profile-favorites(aria-labelledby='favorite-movies-title')
-          header.cine-profile-panel-heading
-            h2#favorite-movies-title Favourite Movies
-            span.cine-profile-count= favorites.length + ' / 10'
-          if favorites.length
-            .cine-profile-favorites-grid
-              each movie in favorites
-                a.cine-profile-favorite(href='/movies/' + movie.id, title=movie.title || 'View movie')
-                  if movie.posterPath || movie.poster_path
-                    img(src='https://image.tmdb.org/t/p/w342' + (movie.posterPath || movie.poster_path), alt=(movie.title || 'Movie') + ' poster', loading='lazy')
-                  else
-                    .cine-profile-favorite-placeholder= movie.title || 'No poster'
-                  span.cine-profile-favorite-title= movie.title || 'Untitled movie'
-          else
-            p.cine-profile-empty No favourite movies added yet.
+                    .cine-profile-movie-info
+                      h3= movie.title
+                      if movie.score
+                        span.cine-profile-score ★ #{movie.score}/10
+            else
+              .cine-profile-empty
+                p No completed movies yet.
+                if isOwnProfile
+                  a(href='/discover/popular') Find something to watch
+
+          //- favourites section
+          section.cine-profile-favorites
+            .cine-profile-section-heading
+              h2 Favourite Movies
+              span.cine-profile-count #{favoriteMovies.length} / 10
+
+            if favoriteMovies.length
+              .cine-profile-favorites-grid
+                each movie in favoriteMovies
+                  a.cine-profile-movie(href='/movies/' + movie.movieId)
+                    if movie.posterPath
+                      img(
+                        src='https://image.tmdb.org/t/p/w500' + movie.posterPath
+                        alt=movie.title + ' poster'
+                        loading='lazy'
+                      )
+                    else
+                      .cine-profile-no-poster No poster
+
+                    .cine-profile-movie-info
+                      h3= movie.title
+            else
+              .cine-profile-empty
+                p No favourite movies added yet.
+                if isOwnProfile
+                  a(href='/settings') Choose your favourite movies

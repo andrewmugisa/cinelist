@@ -4,12 +4,16 @@ html(lang='en')
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     title #{title} | CineList
+
     link(rel='stylesheet', href='/css/tokens.css')
-    link(rel='stylesheet', href='/css/base.css')
-    link(rel='stylesheet', href='/css/components.css')
-    link(rel='stylesheet', href='/css/layout.css')
-    link(rel='stylesheet', href='/css/pages.css')
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/navbar.css')
     link(rel='stylesheet', href='/css/cinelist.css')
+
+    link(rel='stylesheet', href='/css/auth.css')
+
+    block pageStyles
+
   body.emp-public.cinelist-body
 
     include partials/navbar
@@ -18,3 +22,5 @@ html(lang='en')
       block content
 
     include partials/footer
+
+    block pageScripts 

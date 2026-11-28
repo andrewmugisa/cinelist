@@ -1,5 +1,9 @@
 extends layout
 
+block pageStyles
+  link(rel='stylesheet', href='/css/home.css')
+
+
 block content
 
   section.cine-hero
@@ -9,50 +13,98 @@ block content
       p Keep track of what you've watched, what you loved, and what you want to see next.
       .cine-hero-actions
         if currentUser
-          a.btn-emp-primary(href='/discover/popular') Explore movies
+          a.cine-button.cine-button-primary(href='/discover/popular') Explore movies
         else
-          a.btn-emp-primary(href='/signup') Start your list
-          a.btn-emp-secondary(href='/login') Sign in
+          a.cine-button.cine-button-primary(href='/signup') Start your list
+          a.cine-button.cine-button-secondary(href='/login') Sign in
     .cine-hero-art
       .cine-art-caption THE NEXT GREAT FILM IS OUT THERE.
 
   if tmdbError
-    p.emp-alert.emp-alert-error= tmdbError
-    
+    p.cine-alert.cine-alert-error= tmdbError
+
+  //- Polpular Movies 
   section.cine-section
     .cine-section-heading
       div
         p.cine-eyebrow DISCOVER
         h2 Popular Movies
-      a.btn-emp-secondary(href='/discover/popular') Discover more
+
+      .cine-section-actions
+        .cine-carousel-controls
+          button.cine-carousel-button(
+            type='button'
+            data-carousel-prev
+            aria-label='Move back five movies'
+            disabled
+          ) ‹
+          button.cine-carousel-button(
+            type='button'
+            data-carousel-next
+            aria-label='Move forward five movies'
+          ) ›
+        a.cine-button.cine-button-secondary(href='/discover/popular') Discover more
+
     if popularMovies && popularMovies.length
-      .cine-grid
+      .cine-carousel-track(data-carousel-track)
         each movie in popularMovies
           include partials/movie-card
     else
       p No popular movies are available right now.
 
+  //- Highest Rated 
   section.cine-section
     .cine-section-heading
       div
         p.cine-eyebrow CRITICALLY ACCLAIMED
         h2 Highest Rated
-      a.btn-emp-secondary(href='/discover/top-rated') Discover more
+
+      .cine-section-actions
+        .cine-carousel-controls
+          button.cine-carousel-button(
+            type='button'
+            data-carousel-prev
+            aria-label='Move back five movies'
+            disabled
+          ) ‹
+          button.cine-carousel-button(
+            type='button'
+            data-carousel-next
+            aria-label='Move forward five movies'
+          ) ›
+        a.cine-button.cine-button-secondary(href='/discover/top-rated') Discover more
+
     if topRatedMovies && topRatedMovies.length
-      .cine-grid
+      .cine-carousel-track(data-carousel-track)
         each movie in topRatedMovies
           include partials/movie-card
     else
       p No highly rated movies are available right now.
 
+  //- Upcoming Movies 
   section.cine-section
     .cine-section-heading
       div
         p.cine-eyebrow COMING SOON
         h2 Top Upcoming
-      a.btn-emp-secondary(href='/discover/upcoming') Discover more
+
+      .cine-section-actions
+        .cine-carousel-controls
+          button.cine-carousel-button(
+            type='button'
+            data-carousel-prev
+            aria-label='Move back five movies'
+            disabled
+          ) ‹
+          button.cine-carousel-button(
+            type='button'
+            data-carousel-next
+            aria-label='Move forward five movies'
+          ) ›
+        a.cine-button.cine-button-secondary(href='/discover/upcoming') Discover more
+
     if upcomingMovies && upcomingMovies.length
-      .cine-grid
+      .cine-carousel-track(data-carousel-track)
         each movie in upcomingMovies
           include partials/movie-card
     else
@@ -68,3 +120,6 @@ block content
     article
       h3 Find your next favourite
       p Browse and search the movie catalogue to plan your next watch.
+
+block pageScripts
+  script(src='/js/home.js' defer)

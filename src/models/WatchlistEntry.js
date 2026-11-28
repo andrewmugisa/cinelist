@@ -12,7 +12,7 @@ const watchlistSchema = new mongoose.Schema(
     posterPath: { type: String, default: null },
     releaseDate: { type: String, default: null },
 
-    status: { type: String, enum: STATUSES, default: "Plan to Watch" },
+    status: { type: String, enum: STATUSES, default: "Watching" },
     score: {
       type: Number,
       min: 1,
