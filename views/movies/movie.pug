@@ -5,154 +5,149 @@ block pageStyles
     link(rel='stylesheet', href='/css/movie.css')
 
 block content
-    if tmdbError
-        .cine-movie-error= tmdbError
-
     if movie
-        main.cine-movie-page(
-            data-movie-id=movie.id
-            data-is-logged-in=currentUser ? 'true' : 'false'
-        )
-            //- Cinematic backdrop and heading
-            header.cine-movie-hero(
-                style=movie.backdrop_path ? `--movie-backdrop: url(https://image.tmdb.org/t/p/original${movie.backdrop_path})` : ''
-            )
-                .cine-movie-hero-content
-                    a.cine-movie-back-link(href='/discover')
-                        | ← Back to discover
+        main.cine-movie-page(data-movie-id=movie.id)
+            header.cine-movie-header
+                a.cine-movie-back(href='/discover') ← Back to discover
+                p.cine-movie-eyebrow MOVIE DETAILS
+                h1.cine-movie-title= movie.title
 
-                    p.cine-movie-eyebrow MOVIE DETAILS
-
-                    h1.cine-movie-title= movie.title
-
-                    if movie.tagline
-                        p.cine-movie-tagline= movie.tagline
-
-                    .cine-movie-heading-meta
-                        if movie.release_date
-                            span= movie.release_date.slice(0, 4)
-                        if movie.runtime
-                            span= Math.floor(movie.runtime / 60) + 'h ' + (movie.runtime % 60) + 'm'
-                        if movie.genres && movie.genres.length
-                            span= movie.genres.map(genre => genre.name).join(' · ')
-
-            //- Main content
-            .cine-movie-content
-                .cine-movie-primary
-                    //- Poster
-                    aside.cine-movie-poster-column
-                        .cine-movie-poster
-                            if movie.poster_path
-                                img(
-                                    src='https://image.tmdb.org/t/p/w500' + movie.poster_path
-                                    alt=movie.title + ' poster'
-                                )
-                            else
-                                .cine-movie-no-poster Poster unavailable
-
-                        if currentUser
-                            button#cine-add-to-list.cine-movie-add-button(type='button')
-                                | + Add to my list
-
-                            .cine-movie-list-controls#cine-list-controls(hidden)
-                                label(for='cine-movie-status') YOUR LIST STATUS
-                                select#cine-movie-status
-                                    each status in statuses || ['Plan to Watch', 'Watching', 'Completed', 'On Hold', 'Dropped']
-                                        option(value=status)= status
-
-                                button#cine-remove-from-list.cine-movie-remove-button(type='button')
-                                    | Remove from my list
-
-                            p#cine-list-message.cine-feedback(aria-live='polite')
-
-                            form.cine-movie-favorite-form(
-                                method='POST'
-                                action='/movies/' + movie.id + '/favorite'
+            .cine-movie-layout
+                aside.cine-movie-sidebar
+                    .cine-movie-poster
+                        if movie.poster_path
+                            img(
+                                src='https://image.tmdb.org/t/p/w500' + movie.poster_path
+                                alt=movie.title + ' poster'
                             )
-                                input(type='hidden', name='redirectTo', value='/movies/' + movie.id)
-                                button.cine-movie-favorite-button(type='submit')
-                                    | ♡ Add to favourites
                         else
-                            a.cine-movie-add-button(href='/login')
-                                | + Add to my list
+                            .cine-movie-no-poster Poster unavailable
 
-                            a.cine-movie-favorite-button(href='/login')
-                                | ♡ Add to favourites
+                    if currentUser
+                        button#cine-add-to-list.cine-add-list-button(type='button')
+                            | + Add to your list
 
-                    //- Movie information
-                    .cine-movie-information
-                        //- Ratings
-                        section.cine-movie-ratings
-                            .cine-rating-card.cine-rating-public
-                                span.cine-rating-label TMDB RATING
-                                .cine-rating-number
-                                    strong= movie.vote_average ? movie.vote_average.toFixed(1) : '—'
-                                    span / 10
-                                .cine-rating-caption Public movie rating
+                        p#cine-list-message.cine-list-message(aria-live='polite')
 
-                            .cine-rating-card.cine-rating-personal
-                                span.cine-rating-label YOUR RATING
-                                .cine-rating-number
-                                    strong#cine-user-score —
-                                    span / 10
-                                .cine-rating-caption Only visible in your list
+                        form.cine-favorite-form(
+                            method='POST'
+                            action='/movies/' + movie.id + '/favorite'
+                        )
+                            input(
+                                type='hidden'
+                                name='redirectTo'
+                                value='/movies/' + movie.id
+                            )
 
-                                if currentUser
-                                    .cine-rating-picker
-                                        each score in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                                            button.cine-rating-option(
-                                                type='button'
-                                                data-score=score
-                                                aria-label='Rate ' + score + ' out of 10'
-                                            )= score
-                                    p#cine-rating-message.cine-feedback(aria-live='polite')
+                            button.cine-favorite-button(
+                                type='submit'
+                                class=isFavorite ? 'is-favorite' : ''
+                            )
+                                if isFavorite
+                                    span.cine-favorite-icon ♥
+                                    | Remove from favourites
                                 else
-                                    a.cine-rating-login(href='/login') Login to rate this movie
+                                    span.cine-favorite-icon ♡
+                                    | Add to favourites
+                    else
+                        a.cine-add-list-button(href='/login')
+                            | + Add to your list
 
-                        //- Overview
-                        section.cine-movie-section.cine-movie-overview
-                            h2 Overview
-                            if movie.overview
-                                p= movie.overview
-                            else
-                                p.cine-movie-muted No overview is available for this movie.
+                        a.cine-favorite-button(href='/login')
+                            span.cine-favorite-icon ♡
+                            | Add to favourites
 
-                        //- Details
-                        section.cine-movie-section
-                            h2 Details
+                    section.cine-movie-section.cine-movie-sidebar-info
+                        h2 Information
 
-                            .cine-movie-details-grid
+                        .cine-movie-details
+                            if movie.release_date
+                                .cine-detail-item
+                                    span.cine-detail-label Release date
+                                    strong= movie.release_date
+
+                            .cine-detail-item
+                                span.cine-detail-label Release status
                                 if movie.release_date
-                                    .cine-detail-item
-                                        span Release date
-                                        strong= movie.release_date
+                                    if movie.release_date <= new Date().toISOString().slice(0, 10)
+                                        strong.cine-release-status.is-released Released
+                                    else
+                                        strong.cine-release-status.is-upcoming Upcoming
+                                else
+                                    strong.cine-release-status.is-unknown Unknown
 
-                                if movie.runtime
-                                    .cine-detail-item
-                                        span Runtime
-                                        strong #{movie.runtime} minutes
+                            if movie.original_language
+                                .cine-detail-item
+                                    span.cine-detail-label Original language
+                                    strong= movie.original_language.toUpperCase()
 
-                                if movie.original_language
-                                    .cine-detail-item
-                                        span Original language
-                                        strong= movie.original_language.toUpperCase()
+                            if movie.runtime
+                                .cine-detail-item
+                                    span.cine-detail-label Runtime
+                                    strong= Math.floor(movie.runtime / 60) + 'h ' + (movie.runtime % 60) + 'm'
 
-                                if movie.genres && movie.genres.length
-                                    .cine-detail-item
-                                        span Genres
-                                        strong= movie.genres.map(genre => genre.name).join(', ')
+                .cine-movie-main
+                    section.cine-movie-rating-panel
+                        .cine-rating-block.cine-rating-cinelist
+                            span.cine-rating-label CINELIST SCORE
+                            .cine-rating-value
+                                strong= movie.vote_average ? movie.vote_average.toFixed(1) : '—'
+                                span / 10
+                            p.cine-rating-caption TMDB community rating
 
-                        //- Trailer
-                        if movie.trailerUrl
-                            section.cine-movie-section.cine-movie-trailer
-                                h2 Trailer
-                                a.cine-trailer-link(
-                                    href=movie.trailerUrl
-                                    target='_blank'
-                                    rel='noopener noreferrer'
+                        .cine-rating-divider
+
+                        .cine-rating-block.cine-rating-personal
+                            span.cine-rating-label YOUR SCORE
+                            .cine-rating-value
+                                strong#cine-user-score —
+                                span / 10
+                            p.cine-rating-caption Your personal rating
+
+                    if currentUser
+                        section.cine-user-rating-section
+                            .cine-user-rating-heading
+                                h2 Rate this movie
+                                p Select a score from 1 to 10
+
+                            .cine-rating-picker
+                                each score in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                                    button.cine-rating-option(
+                                        type='button'
+                                        data-score=score
+                                        aria-label='Rate ' + score + ' out of 10'
+                                    )= score
+
+                            button#cine-remove-rating.cine-remove-rating-button(
+                                type='button'
+                                hidden
+                            )
+                                | Remove rating
+
+                            p#cine-rating-message.cine-feedback(aria-live='polite')
+                    else
+                        p.cine-login-prompt
+                            a(href='/login') Log in
+                            |  to rate this movie.
+
+                    section.cine-movie-section
+                        h2 Overview
+                        if movie.overview
+                            p.cine-movie-overview= movie.overview
+                        else
+                            p.cine-movie-muted No overview is available for this movie.
+
+                    if movie.trailerUrl
+                        section.cine-movie-section.cine-movie-trailer
+                            h2 Official trailer
+                            .cine-trailer-container
+                                iframe(
+                                    src=movie.trailerUrl
+                                    title=movie.title + ' trailer'
+                                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+                                    allowfullscreen
+                                    loading='lazy'
                                 )
-                                    span.cine-trailer-play ▶
-                                    span Watch trailer on YouTube
 
             if currentUser
                 script(src='/js/movie.js' defer)
